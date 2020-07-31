@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <script src="/static/simplepeer.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+        <script src="/static/jquery-3.4.1.min.js"></script>
+        <script src="/static/vue-2.6.11.js"></script>
+
+        <script src="/static/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap-4.3.1/css/bootstrap.min.css">
+
+        <style type="text/css">
+            .row {
+                margin-right: 0px;
+                margin-left: 0px;
+            }
+        </style>
+
+        <style type="text/css">
+            html {
+                overflow-y: overlay;
+            }
+
+            .center {
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                flex-flow: column;
+            }
+
+            #main-box {
+                height: 100%;
+            }
+
+            .join_item-box {
+                margin: 10px;
+            }
+
+            #join-box {
+                background: gainsboro;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main-box" class="container center col-10">
+            <div id="join-box">
+                <form action="/room" method="get">
+                    <div class="center join_item-box">
+                        <div>Room ID</div><input id="room_id-text" name="room_id" type="text" />
+                    </div>
+                    <div class="center join_item-box">
+                        <div>Your name</div><input id="user_name-text" name="user_name" type="text" />
+                    </div>
+                    <div class="center join_item-box">
+                        <input id="join_room-button" type="submit" value="Join" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

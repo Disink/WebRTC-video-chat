@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <script src="/static/simplepeer.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+        <script src="/static/jquery-3.4.1.min.js"></script>
+        <script src="/static/vue-2.6.11.js"></script>
+
+        <script src="/static/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap-4.3.1/css/bootstrap.min.css">
+
+
+        <style type="text/css">
+        .row {
+            margin-right: 0px;
+            margin-left: 0px;
+        }
+        </style>
+        <style type="text/css">
+
+        html {
+            overflow-y: overlay;
+        }
+
+        video {
+            width: 100%;
+        }
+        .center {
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-flow: column;
+        }
+
+        .local_stream-box, .remote_stream-box {
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+        .box {
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+
+        .stream_list-box {
+            margin-top: 10px;
+            background: gray;
+        }
+        </style>
+
+    </head>
+    <body>
+        <div id="main-box" class="container col-10">
+            <div>
+                <input id="open_camera-button" type="button" value="Open Camera" />
+                <input id="share_display-button" type="button" value="Share Display" />
+            </div>
+
+            <div id="display-box" class="stream_list-box">
+                <div class="row">
+                    <template v-if="selected_stream_array_list.length == 1">
+                        <div id="master_display-box" class="col-12 box">
+                            <div id="selected_stream_display-box-0">
+                                <video id="display-video-0" autoplay playsinline muted></video>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template v-else-if="selected_stream_array_list.length >= 2">
+                        <div id="master_display-box" class="col-9 box">
+                            <div id="selected_stream_display-box-0">
+                                <video id="display-video-0" autoplay playsinline muted></video>
+                            </div>
+                        </div>
+
+                        <div id="slave_display-box" class="col-3 box">
+                            <template v-for="(stream, index) in selected_stream_array_list">
+                                <div v-if="index > 0" >
+                                    <video v-bind:id="'display-video-' + index" autoplay playsinline muted></video>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <template v-else>
+                        <div>No Media</div>
+                    </template>
+                </div>
+            </div>
+
+            <div id="local_stream_list-box" class="stream_list-box">
+                <div class="row">
+                    <template v-for="(media, media_type) in local_media_list">
+                        <div class="col-3 center local_stream-box">
+                            <video v-bind:id="'local_' + media_type + '-video'" autoplay playsinline muted></video>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div id="remote_stream_list-box" class="stream_list-box">
+                <div class="row">
+                    <template v-for="(peer, peer_id) in remote_media_list">
+                        <template v-for="(media, media_type) in peer">
+                            <div class="col-3 center local_stream-box">
+                                <video v-bind:id="peer_id + '_remote_' + media_type + '-video'" autoplay playsinline muted></video>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <script src="/static/self/vue.js"></script>
+        <script src="/static/self/socket.js"></script>
+
+    </body>
+</html>
