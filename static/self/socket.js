@@ -15,6 +15,17 @@ let params = new URLSearchParams(location.search);
 let user_name = params.get('user_name');
 let room_id = params.get('room_id');
 
+
+navigator.mediaDevices.getUserMedia({audio: true, video: true}).then(function(){
+    navigator.mediaDevices.enumerateDevices().then(function(device){
+        select_vue.video_input_device_list = device.filter((item, index) => item.kind == 'videoinput');
+        select_vue.audio_input_device_list = device.filter((item, index) => item.kind == 'audioinput');
+        select_vue.audio_output_device_list = device.filter((item, index) => item.kind == 'audiooutput');
+    });
+});
+
+document.getElementById('select_device-box').style.marginLeft = -(document.getElementById('select_device-box').clientWidth / 2);
+
 local_stream_vue.local_media_list = local_media_list;
 remote_stream_vue.remote_media_list = remote_media_list;
 
@@ -98,14 +109,25 @@ socket.on('get_answer_from_server', function(data){
 
 
 document.getElementById('open_camera-button').addEventListener('click', function(){
+    $('#select_device-box').show();
+    document.getElementById('select_device-box').style.marginLeft = -(document.getElementById('select_device-box').clientWidth / 2);
+    document.getElementById('select_device-box').style.opacity = 1;
+});
+
+document.getElementById('select_device_share-button').addEventListener('click', function(){
     socket.emit('client_stream_media', 'camera');
+    $('#select_device-box').hide();
+});
+
+document.getElementById('select_device_cancel-button').addEventListener('click', function(){
+    $('#select_device-box').hide();
 });
 
 document.getElementById('share_display-button').addEventListener('click', function(){
     socket.emit('client_stream_media', 'display');
 });
 
-socket.on('stream_media', function(data){
+socket.on('get_list_for_stream_media', function(data){
 
     let media_type = data['media_type'];
     let socket_list= data['socket_list'];
@@ -114,7 +136,7 @@ socket.on('stream_media', function(data){
 
     switch (media_type){
         case 'camera':
-            media = navigator.mediaDevices.getUserMedia({video: true, audio: true});
+            media = navigator.mediaDevices.getUserMedia(select_vue.constraints);
             break;
         case 'display':
             media = navigator.mediaDevices.getDisplayMedia({video: true,audio: true});

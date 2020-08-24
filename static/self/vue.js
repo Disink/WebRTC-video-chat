@@ -22,6 +22,46 @@
             });
 
 
+            let select_vue = new Vue({
+                el: '#select_device-box',
+                data: {
+                    constraints: {video: {}, audio: {}},
+                    video_input_device_list: {},
+                    audio_input_device_list: {},
+                    audio_output_device_list: {}
+                },
+                mounted: function(){},
+                updated: function(){
+                    console.log('select_device-box is updated.');
+                    constraints = this.constraints;
+                    constraints['video']['deviceId'] = document.getElementById("video_input_device-select").value;
+                    constraints['audio']['deviceId'] = document.getElementById("audio_input_device-select").value;
+                    navigator.mediaDevices.getUserMedia(constraints).then(function(stream){
+                        document.getElementById('select_device-video').srcObject = stream;
+
+                        document.getElementById("video_input_device-select").onchange = function(){
+                            let device_id = this.value;
+                            select_vue.constraints['video'] = {deviceId: device_id};
+                            navigator.mediaDevices.getUserMedia(constraints).then(function(stream){
+                                document.getElementById('select_device-video').srcObject = stream;
+                            });
+                        }
+
+                        document.getElementById("audio_input_device-select").onchange = function(){
+                            let device_id = this.value;
+                            select_vue.constraints['audio'] = {deviceId: device_id};
+                            navigator.mediaDevices.getUserMedia(constraints).then(function(stream){
+                                document.getElementById('select_device-video').srcObject = stream;
+                            });
+                        }
+                    },
+                    function(){
+                        alert('Camera permission denied');
+                    });
+
+                },
+            });
+
             let local_stream_vue = new Vue({
                 el: '#local_stream_list-box',
                 data: {
@@ -57,7 +97,7 @@
                         Object.keys(media_list[peer_id]).forEach(function(media_type, index){
                             let el = document.getElementById(peer_id + "_remote_" + media_type + "-video");
                             el.srcObject = remote_media_list[peer_id][media_type];
-                            el.onclick = function () {
+                            el.onclick = function(){
                                 display_vue.selected_stream_array_list.push(remote_media_list[peer_id][media_type]);
                             };
                         });

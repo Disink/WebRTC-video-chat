@@ -28,14 +28,11 @@ let socket_list = {};
 let user_list = {};
 let room_list = {};
 
-let i = 1;
 
 var io = require('socket.io')(serv, {});
 io.sockets.on('connection', function(socket){
-    // socket.id = Math.random();
-    socket.id = i;
+    socket.id = Math.random();
     let self_id = socket.id;
-    i = i + 1;
 
     //const player_socket = new modules_player_socket(socket);
     //const user_socket = socket;
@@ -79,7 +76,7 @@ io.sockets.on('connection', function(socket){
         //room_user_socket_list = room.filter((item, index) => item !== self_id);
         room_user_socket_list_filter = room_user_socket_list.filter((item, index) => item !== self_id);
 
-        socket.emit('stream_media', {
+        socket.emit('get_list_for_stream_media', {
             media_type: data,
             socket_list: room_user_socket_list_filter
         });

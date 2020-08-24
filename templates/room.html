@@ -46,15 +46,63 @@
             margin-top: 10px;
             background: gray;
         }
+
+        #select_device-box {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: solid 1px whitesmoke;;
+            box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.7);
+            display: none;
+            opacity: 0;
+        }
+        select {
+            width: 100% !important;
+        }
+        option {
+            width: 100% !important;
+        }
+        #share_button-box {
+            margin-top: 10px;
+        }
+
+        #select_device_button-box {
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        #select_device_share-button {
+            border-radius: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            display: inline;
+            background: #3479e7;
+            color: white;
+            border: 2px solid #3479e7;
+        }
+
+        #select_device_cancel-button {
+            border-radius: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            display: inline;
+            background: white;
+            color: #3479e7;
+            border: 2px solid #cddaeb;
+        }
+
         </style>
 
     </head>
     <body>
         <div id="main-box" class="container col-10">
-            <div>
-                <input id="open_camera-button" type="button" value="Open Camera" />
-                <input id="share_display-button" type="button" value="Share Display" />
-            </div>
 
             <div id="display-box" class="stream_list-box">
                 <div class="row">
@@ -85,6 +133,46 @@
                     <template v-else>
                         <div>No Media</div>
                     </template>
+                </div>
+            </div>
+
+            <div id="share_button-box">
+                <input id="open_camera-button" type="button" value="Open Camera" />
+                <input id="share_display-button" type="button" value="Share Display" />
+            </div>
+
+            <div id="select_device-box" class="box col-4">
+                <div>
+                    <video id="select_device-video" autoplay playsinline muted></video>
+                </div>
+                <div>
+                    <select id="video_input_device-select">
+                        <template v-for="(device, index) in video_input_device_list">
+                            <option v-bind:value="device.deviceId">{{ device.label }}</option>
+                        </template>
+                    </select>
+                </div>
+                <div>
+                    <select id="audio_input_device-select">
+                        <template v-for="(device, index) in audio_input_device_list">
+                            <option v-bind:value="device.deviceId">{{ device.label }}</option>
+                        </template>
+                    </select>
+                </div>
+                <div>
+                    <select>
+                        <template v-for="(device, index) in audio_output_device_list">
+                            <option v-bind:value="device.deviceId">{{ device.label }}</option>
+                        </template>
+                    </select>
+                </div>
+                <div id="select_device_button-box">
+                <!--
+                    <input id="open_camera_confirm-button" type="button" value="Confirm" />
+                    <input id="open_camera_cancel-button" type="button" value="cancel" />
+                -->
+                    <div id="select_device_share-button" class="select_device-button" />分享</div>
+                    <div id="select_device_cancel-button" class="select_device-button" />取消</div>
                 </div>
             </div>
 
